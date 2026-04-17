@@ -56,6 +56,11 @@ public class Playercontroller : MonoBehaviour
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
+
+        if (collision.CompareTag("Finish"))
+        {
+            collision.GetComponent<Level>().MoveToNextLevel();
+        }
     }
 }
 
