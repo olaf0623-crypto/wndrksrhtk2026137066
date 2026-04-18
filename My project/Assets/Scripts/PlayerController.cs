@@ -28,6 +28,12 @@ public class Playercontroller : MonoBehaviour
     {
         rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y);
 
+        if (moveInput < 0)
+            transform.localScale = new Vector3(5, 5, 1);
+        else if (moveInput > 0)
+            transform.localScale = new Vector3(-5, 5, 1);
+
+
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
     }
 
@@ -61,6 +67,12 @@ public class Playercontroller : MonoBehaviour
         {
             collision.GetComponent<Level>().MoveToNextLevel();
         }
+
+        if (collision.CompareTag("Enemy"))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+
     }
 }
 
