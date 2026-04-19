@@ -7,7 +7,7 @@ public class TitleManager : MonoBehaviour
 
     public void GamesStart()
     {
-        SceneManager.LoadScene("PlayScene_Door1");
+        SceneManager.LoadScene("Level_1");
     }
 
     public void GameTitle()

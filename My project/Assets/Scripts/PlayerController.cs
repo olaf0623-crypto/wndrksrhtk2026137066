@@ -7,6 +7,7 @@ public class Playercontroller : MonoBehaviour
 {
     public float moveSpeed = 5f;
     public float jumpForce = 5f;
+    public float boostedJumpForce = 10f;
     public Transform groundCheck;
     public LayerMask groundLayer;
 
@@ -15,12 +16,16 @@ public class Playercontroller : MonoBehaviour
     private Animator pAni;
     private bool isGrounded;
     private float moveInput;
+    private bool Invincible = false;
+    private float originalJumpForce;
 
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         pAni = GetComponent<Animator>();
+
+        originalJumpForce = jumpForce;
     }
 
 
@@ -28,10 +33,22 @@ public class Playercontroller : MonoBehaviour
     {
         rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y);
 
-        if (moveInput < 0)
-            transform.localScale = new Vector3(5, 5, 1);
-        else if (moveInput > 0)
-            transform.localScale = new Vector3(-5, 5, 1);
+
+        if (Invincible)
+        {
+            if (moveInput < 0)
+                transform.localScale = new Vector3(5, 5, 5);
+            else if (moveInput > 0)
+                transform.localScale = new Vector3(-5, 5, 5);
+
+        }
+        else
+        {
+            if (moveInput < 0)
+                transform.localScale = new Vector3(5, 5, 5);
+            else if (moveInput > 0)
+                transform.localScale = new Vector3(-5, 5, 5);
+        }
 
 
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
@@ -60,7 +77,12 @@ public class Playercontroller : MonoBehaviour
     {
         if (collision.CompareTag("Respawn"))
         {
+            if (Invincible)
+                return;
+
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+
+
         }
 
         if (collision.CompareTag("Finish"))
@@ -70,9 +92,38 @@ public class Playercontroller : MonoBehaviour
 
         if (collision.CompareTag("Enemy"))
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            if (Invincible)
+                Destroy(collision.gameObject);
+            else
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
 
+        if (collision.CompareTag("InvincibleItem"))
+        {
+            Invincible = true;
+            Invoke(nameof(ResetInvincible), 2f);
+            Destroy(collision.gameObject);
+        }
+
+        if (collision.CompareTag("boostedJumpItem"))
+        {
+            jumpForce = boostedJumpForce;
+            Invoke(nameof(ResetJumpForce), 5f);
+            Destroy(collision.gameObject);
+        }
+
+
+
+    }
+    
+    void ResetInvincible()
+    {
+        Invincible = false;
+    }
+
+    void ResetJumpForce()
+    {
+        jumpForce = originalJumpForce;
     }
 }
 
