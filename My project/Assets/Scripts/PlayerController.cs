@@ -8,6 +8,7 @@ public class Playercontroller : MonoBehaviour
     public float moveSpeed = 5f;
     public float jumpForce = 5f;
     public float boostedJumpForce = 10f;
+    public float boostedMoveSpeed = 10f;
     public Transform groundCheck;
     public LayerMask groundLayer;
 
@@ -18,6 +19,7 @@ public class Playercontroller : MonoBehaviour
     private float moveInput;
     private bool Invincible = false;
     private float originalJumpForce;
+    private float originalMoveSpeed;
 
 
     private void Awake()
@@ -26,6 +28,8 @@ public class Playercontroller : MonoBehaviour
         pAni = GetComponent<Animator>();
 
         originalJumpForce = jumpForce;
+
+        originalMoveSpeed = moveSpeed;
     }
 
 
@@ -66,6 +70,8 @@ public class Playercontroller : MonoBehaviour
     {
         if (value.isPressed && isGrounded)
         {
+            isGrounded = false;
+
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0f);
             rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
             pAni.SetTrigger("Jump");
@@ -112,6 +118,13 @@ public class Playercontroller : MonoBehaviour
             Destroy(collision.gameObject);
         }
 
+        if (collision.CompareTag("SpeedItem"))
+        {
+            moveSpeed = boostedMoveSpeed;
+            Invoke(nameof(ResetMoveSpeed), 3f);
+            Destroy(collision.gameObject);
+        }
+
 
 
     }
@@ -124,6 +137,11 @@ public class Playercontroller : MonoBehaviour
     void ResetJumpForce()
     {
         jumpForce = originalJumpForce;
+    }
+
+    void ResetMoveSpeed()
+    {
+        moveSpeed = originalMoveSpeed;
     }
 }
 
