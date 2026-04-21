@@ -29,4 +29,11 @@ public class TitleManager : MonoBehaviour
     {
         Debug.Log("BUTTON CLICKED!");
     }
+
+    public void QuitGame()
+    {
+        Debug.Log("게임 종료");
+        Application.Quit();
+    }
+
 }
