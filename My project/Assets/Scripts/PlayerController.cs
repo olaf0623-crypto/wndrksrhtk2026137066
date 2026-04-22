@@ -40,18 +40,17 @@ public class Playercontroller : MonoBehaviour
 
         if (Invincible)
         {
-            if (moveInput < 0)
-                transform.localScale = new Vector3(5, 5, 5);
-            else if (moveInput > 0)
-                transform.localScale = new Vector3(-5, 5, 5);
-
+            if (moveInput > 0)
+                transform.localScale = new Vector3(4, 4, 4);
+            else if (moveInput < 0)
+                transform.localScale = new Vector3(-4, 4, 4);
         }
         else
         {
-            if (moveInput < 0)
-                transform.localScale = new Vector3(5, 5, 5);
-            else if (moveInput > 0)
-                transform.localScale = new Vector3(-5, 5, 5);
+            if (moveInput > 0)
+                transform.localScale = new Vector3(4, 4, 4);
+            else if (moveInput < 0)
+                transform.localScale = new Vector3(-4, 4, 4);
         }
 
 
@@ -114,7 +113,7 @@ public class Playercontroller : MonoBehaviour
         if (collision.CompareTag("boostedJumpItem"))
         {
             jumpForce = boostedJumpForce;
-            Invoke(nameof(ResetJumpForce), 5f);
+            Invoke(nameof(ResetJumpForce), 3f);
             Destroy(collision.gameObject);
         }
 
@@ -142,6 +141,19 @@ public class Playercontroller : MonoBehaviour
     void ResetMoveSpeed()
     {
         moveSpeed = originalMoveSpeed;
+    }
+
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("JumpPad"))
+        {
+            // 기존 점프 초기화
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0f);
+
+            // 위로 강하게 튐
+            rb.AddForce(Vector2.up * 10f, ForceMode2D.Impulse);
+        }
     }
 }
 
