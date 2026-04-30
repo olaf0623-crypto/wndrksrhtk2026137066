@@ -21,6 +21,8 @@ public class Playercontroller : MonoBehaviour
     private float originalJumpForce;
     private float originalMoveSpeed;
 
+    float score;
+
 
     private void Awake()
     {
@@ -92,6 +94,7 @@ public class Playercontroller : MonoBehaviour
 
         if (collision.CompareTag("Finish"))
         {
+            HighScore.TrySet(SceneManager.GetActiveScene().buildIndex, (int)score);
             collision.GetComponent<Level>().MoveToNextLevel();
         }
 
@@ -108,6 +111,7 @@ public class Playercontroller : MonoBehaviour
             Invincible = true;
             Invoke(nameof(ResetInvincible), 2f);
             Destroy(collision.gameObject);
+            score += 10f;
         }
 
         if (collision.CompareTag("boostedJumpItem"))
@@ -115,6 +119,7 @@ public class Playercontroller : MonoBehaviour
             jumpForce = boostedJumpForce;
             Invoke(nameof(ResetJumpForce), 3f);
             Destroy(collision.gameObject);
+            score += 10f;
         }
 
         if (collision.CompareTag("SpeedItem"))
@@ -122,6 +127,7 @@ public class Playercontroller : MonoBehaviour
             moveSpeed = boostedMoveSpeed;
             Invoke(nameof(ResetMoveSpeed), 3f);
             Destroy(collision.gameObject);
+            score += 10f;
         }
 
 
