@@ -94,6 +94,7 @@ public class Playercontroller : MonoBehaviour
 
         if (collision.CompareTag("Finish"))
         {
+            StageResultSaver.SaveStage(SceneManager.GetActiveScene().buildIndex, (int)score);
             HighScore.TrySet(SceneManager.GetActiveScene().buildIndex, (int)score);
             collision.GetComponent<Level>().MoveToNextLevel();
         }
@@ -128,6 +129,7 @@ public class Playercontroller : MonoBehaviour
             Invoke(nameof(ResetMoveSpeed), 3f);
             Destroy(collision.gameObject);
             score += 10f;
+            score += collision.GetComponent<ItemObject>().GetPoint();
         }
 
 
