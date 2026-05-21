@@ -113,6 +113,7 @@ public class Playercontroller : MonoBehaviour
             Invoke(nameof(ResetInvincible), 2f);
             Destroy(collision.gameObject);
             score += 10f;
+            score += collision.GetComponent<ItemObject>().GetPoint();
         }
 
         if (collision.CompareTag("boostedJumpItem"))
@@ -121,6 +122,7 @@ public class Playercontroller : MonoBehaviour
             Invoke(nameof(ResetJumpForce), 3f);
             Destroy(collision.gameObject);
             score += 10f;
+            score += collision.GetComponent<ItemObject>().GetPoint();
         }
 
         if (collision.CompareTag("SpeedItem"))
